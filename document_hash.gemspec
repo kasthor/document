@@ -5,7 +5,7 @@ require 'document_hash/version'
 
 Gem::Specification.new do |gem|
   gem.name          = "document_hash"
-  gem.version       = Document::VERSION
+  gem.version       = DocumentHash::VERSION
   gem.authors       = ["Giancarlo Palavicini"]
   gem.email         = ["kasthor@gmail.com"]
   gem.description   = %q{Implements a multi-level nested document, that notifies about changes, and some other related features}
