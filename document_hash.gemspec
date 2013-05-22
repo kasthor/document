@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'document/version'
+require 'document_hash/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "document"
+  gem.name          = "document_hash"
   gem.version       = Document::VERSION
   gem.authors       = ["Giancarlo Palavicini"]
   gem.email         = ["kasthor@gmail.com"]

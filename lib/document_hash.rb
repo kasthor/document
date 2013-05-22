@@ -1,6 +1,6 @@
-require "document/version"
+require "document_hash/version"
 
-module Document
+module DocumentHash
   class Core < Hash
     def self.[] *attr
       super(*attr).tap do|new|
