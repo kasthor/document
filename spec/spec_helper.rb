@@ -1,4 +1,4 @@
-require './lib/document'
+require './lib/document_hash'
 
 RSpec.configure do |config|
 

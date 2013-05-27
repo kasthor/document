@@ -1,4 +1,4 @@
-describe Document::Core do
+describe DocumentHash::Core do
   it "inherits from a hash" do
     subject.is_a? Hash
   end
@@ -21,10 +21,10 @@ describe Document::Core do
     subject["test"].should == "test"
   end
 
-  it "converts any internal hashes to Documents" do
+  it "converts any internal hashes to DocumentHashes" do
     subject[:test] = { inner: "test" }
 
-    subject[:test].should be_a_kind_of Document::Core
+    subject[:test].should be_a_kind_of DocumentHash::Core
   end
 
   it "makes it child documents to refer its parent" do
@@ -63,9 +63,14 @@ describe Document::Core do
     subject[:test].should_not be_changed
   end
 
-  it "converts inner hashes into Documents" do
-    subject = Document::Core[ { test: { inner: "test" } } ]
+  it "converts inner hashes into DocumentHashes" do
+    subject = DocumentHash::Core[ { test: { inner: "test" } } ]
 
-    subject[:test].should be_a_kind_of Document::Core
+    subject[:test].should be_a_kind_of DocumentHash::Core
+  end
+
+  it "simbolizes the keys when creating a hash" do
+    subject = DocumentHash::Core[ { "test" => "value" } ]
+    subject.keys.should include :test
   end
 end

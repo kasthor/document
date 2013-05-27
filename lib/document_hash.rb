@@ -5,9 +5,10 @@ module DocumentHash
     def self.[] *attr
       super(*attr).tap do|new|
         new.each do |k,v|
-          p v.class
           new[k] = new.class[v] if v.is_a?(Hash) && ! v.is_a?(self.class)
         end
+
+        symbolize_keys new
       end
     end
 
@@ -54,6 +55,12 @@ module DocumentHash
 
     def changed_attributes 
       @changed ||= Set.new
+    end
+
+    def self.symbolize_keys hash
+      hash.keys.each do |key|
+        hash[(key.to_sym rescue key) || key] = hash.delete(key)
+      end
     end
   end
 end
