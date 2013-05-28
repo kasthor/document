@@ -1,3 +1,4 @@
+require "set"
 require "document_hash/version"
 
 module DocumentHash
@@ -45,6 +46,16 @@ module DocumentHash
       values.select{|v| v.is_a? self.class }.each{ |v| v.reset! }
     end
 
+    def merge other
+      self.class.symbolize_keys other
+      super other
+    end
+
+    def merge! other
+      self.class.symbolize_keys other
+      super other
+    end
+
     private 
 
     attr_accessor :parent, :parent_key
@@ -54,7 +65,7 @@ module DocumentHash
     end
 
     def changed_attributes 
-      @changed ||= Set.new
+      @changed ||= ::Set.new
     end
 
     def self.symbolize_keys hash

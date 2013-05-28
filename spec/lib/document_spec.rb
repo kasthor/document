@@ -65,12 +65,21 @@ describe DocumentHash::Core do
 
   it "converts inner hashes into DocumentHashes" do
     subject = DocumentHash::Core[ { test: { inner: "test" } } ]
-
     subject[:test].should be_a_kind_of DocumentHash::Core
   end
 
   it "simbolizes the keys when creating a hash" do
     subject = DocumentHash::Core[ { "test" => "value" } ]
     subject.keys.should include :test
+  end
+
+  it "merges new values converting the keys to symbols" do
+    subject = DocumentHash::Core.new
+
+    subject.merge! "test1" => "value"
+    subject.keys.should include :test1
+
+    subject = subject.merge "test2" => "value2"
+    subject.keys.should include :test2
   end
 end
