@@ -82,4 +82,33 @@ describe DocumentHash::Core do
     subject = subject.merge "test2" => "value2"
     subject.keys.should include :test2
   end
+
+  it "receives an after change method" do
+    subject = DocumentHash::Core.new
+    subject.should respond_to :after_change
+  end
+
+  it "triggers the after change block" do
+    subject = DocumentHash::Core.new
+    test_mock = mock("test")
+    test_mock.should_receive(:callback_mock).with([:test])
+
+    subject.after_change do |path|
+      test_mock.callback_mock path
+    end
+
+    subject["test"] = "value"
+  end
+  
+  it "receives the right path when multilevel" do
+    subject = DocumentHash::Core[ { inner: { attribute: "value" } } ]
+    test_mock = mock("test")
+    test_mock.should_receive(:callback_mock).with([:inner, :attribute])
+
+    subject.after_change do |path|
+      test_mock.callback_mock path
+    end
+
+    subject[:inner][:attribute] = "hello"
+  end
 end
