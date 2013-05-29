@@ -43,13 +43,14 @@ module DocumentHash
     end
 
     def merge other
-      self.class.symbolize_keys other
-      super other
+      dup.merge! other
     end
 
     def merge! other
       self.class.symbolize_keys other
+      other = Hash[ other.collect{ |k, v| [ k, execute_before_change_callback(k,v) ] } ]
       super other
+      other.each { |k, v| changed_key k,v }
     end
 
     private 
@@ -69,7 +70,6 @@ module DocumentHash
 
       value = @before_change.call path, value if @before_change
       value = parent.__send__ :execute_before_change_callback, path.unshift(parent_key), value if parent
-
       value
     end
 
