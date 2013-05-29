@@ -31,8 +31,9 @@ module DocumentHash
         val.__send__ :parent_key=, key;
       end
 
+      val = execute_before_change_callback key,val
       super key, val
-      changed_key key
+      changed_key key, val
     end
 
     def reset!
@@ -55,12 +56,21 @@ module DocumentHash
 
     attr_accessor :parent, :parent_key
 
-    def changed_key key
+    def changed_key key, value
       path = Array(key)
 
-      @after_change.call path if @after_change
+      @after_change.call path, value if @after_change
       changed_attributes << path.first
-      parent.__send__ :changed_key, path.unshift(parent_key) if parent
+      parent.__send__ :changed_key, path.unshift(parent_key), value if parent
+    end
+
+    def execute_before_change_callback key, value
+      path = Array(key)
+
+      value = @before_change.call path, value if @before_change
+      value = parent.__send__ :execute_before_change_callback, path.unshift(parent_key), value if parent
+
+      value
     end
 
     def changed_attributes 
