@@ -2,11 +2,14 @@ module DocumentHash
   class Core < Hash
     def self.[] *attr
       super(*attr).tap do|new|
-        new.each do |k,v|
-          new[k] = new.class[v] if v.is_a?(Hash) && ! v.is_a?(self.class)
+        new.keys.each do |k|
+          if new[k].is_a?(Hash) && ! new[k].is_a?(self.class)
+            new[k] = new.class[new.delete(k)] 
+          else
+            new[k] = new.delete(k)
+          end
         end
-
-        symbolize_keys new
+        #symbolize_keys new
       end
     end
 
