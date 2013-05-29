@@ -50,10 +50,7 @@ module DocumentHash
     end
 
     def merge! other
-      self.class.symbolize_keys other
-      other = Hash[ other.collect{ |k, v| [ k, execute_before_change_callback(k,v) ] } ]
-      super other
-      other.each { |k, v| changed_key k,v }
+      other.each { |k, v| self[k] = v }
     end
 
     private 
