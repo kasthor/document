@@ -1,7 +1,9 @@
 module DocumentHash
   class Core < Hash
-    def self.[] *attr
-      super(*attr).tap do|new|
+    def self.[] hash, parent = nil, parent_key = nil
+      super(hash).tap do|new|
+        new.__send__ :parent=, parent if parent
+        new.__send__ :parent_key=, parent_key if parent_key
         new.keys.each do |k|
           if new[k].is_a?(Hash) && ! new[k].is_a?(self.class)
             new[k] = new.class[new.delete(k)] 
@@ -29,9 +31,7 @@ module DocumentHash
       key = key.to_sym
 
       if val.is_a? Hash
-        val = self.class[val] 
-        val.__send__ :parent=, self;
-        val.__send__ :parent_key=, key;
+        val = self.class[val, self, key] 
       end
 
       val = execute_before_change_callback key,val
@@ -51,6 +51,8 @@ module DocumentHash
 
     def merge! other
       other.each { |k, v| self[k] = v }
+
+      self
     end
 
     private 
