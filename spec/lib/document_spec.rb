@@ -135,4 +135,15 @@ describe DocumentHash::Core do
     subject[:inner][:attribute].should == "hola"
   end
 
+  it "converts itself to a hash", focus:true do
+    subject = DocumentHash::Core[{ test: "test" }]
+    hash = subject.to_hash
+    hash.should be_an_instance_of Hash
+  end
+
+  it "converts internal hashes to hash", focus: true do
+    subject = DocumentHash::Core[{ test: { inner: "value" } }]
+    hash = subject.to_hash
+    hash[:test].should be_an_instance_of Hash
+  end
 end

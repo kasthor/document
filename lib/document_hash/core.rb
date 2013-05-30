@@ -55,6 +55,18 @@ module DocumentHash
       self
     end
 
+    def to_hash
+      Hash[
+        self.collect do |k,v|
+          if v.is_a? DocumentHash::Core
+            [ k, v.to_hash ]
+          else
+            [ k, v ]
+          end
+        end
+      ]
+    end
+
     private 
 
     attr_accessor :parent, :parent_key
@@ -84,5 +96,6 @@ module DocumentHash
         hash[(key.to_sym rescue key) || key] = hash.delete(key)
       end
     end
+
   end
 end
