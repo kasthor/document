@@ -45,6 +45,16 @@ module DocumentHash
       values.select{|v| v.is_a? self.class }.each{ |v| v.reset! }
     end
 
+    def touch!
+      self.each do |key, value|
+        if value.is_a? self.class
+          value.touch!
+        else
+          changed_key key,value
+        end
+      end
+    end
+
     def merge other
       dup.merge! other
     end

@@ -135,13 +135,37 @@ describe DocumentHash::Core do
     subject[:inner][:attribute].should == "hola"
   end
 
-  it "converts itself to a hash", focus:true do
+  it "has a touch functionality that re runs the after change callback" do
+    subject = DocumentHash::Core[ { test: :value } ]
+    test_mock = mock("test")
+    test_mock.should_receive(:callback_mock).with( [:test], :value )
+
+    subject.after_change do |path,value|
+      test_mock.callback_mock path, value  
+    end
+
+    subject.touch!
+  end
+
+  it "has a touch functionality that handle deeper hashes" do
+    subject = DocumentHash::Core[ { inner: { attribute: :value } } ]
+    test_mock = mock("test")
+    test_mock.should_receive(:callback_mock).with( [:inner, :attribute], :value )
+
+    subject.after_change do |path,value|
+      test_mock.callback_mock path, value  
+    end
+
+    subject.touch!
+  end
+
+  it "converts itself to a hash" do
     subject = DocumentHash::Core[{ test: "test" }]
     hash = subject.to_hash
     hash.should be_an_instance_of Hash
   end
 
-  it "converts internal hashes to hash", focus: true do
+  it "converts internal hashes to hash" do
     subject = DocumentHash::Core[{ test: { inner: "value" } }]
     hash = subject.to_hash
     hash[:test].should be_an_instance_of Hash
