@@ -170,4 +170,49 @@ describe DocumentHash::Core do
     hash = subject.to_hash
     hash[:test].should be_an_instance_of Hash
   end
+
+  it "can access values thru methods" do
+    subject = DocumentHash::Core[{ test: "value" }]
+    subject.test.should == "value"
+  end
+
+  it "can access values thru methods at deeper levels" do
+    subject = DocumentHash::Core[{ test: { inner: "value" } }]
+    subject.test.inner.should == "value"
+  end
+
+  it "returns nil for unknown values" do
+    subject = DocumentHash::Core[{ test: { inner: "value" } }]
+    subject.unknown.should be_nil
+  end
+
+  it "returns nil for unknown values at deeper levels" do
+    subject = DocumentHash::Core[{ test: { inner: "value" } }]
+    subject.unknown.inner.should be_nil
+  end
+
+  it "assigns a new value if unknown value is received" do
+    subject = DocumentHash::Core[{ test: { inner: "value" } }]
+    subject.unknown = 'test'
+    subject.unknown.should == 'test'
+  end
+
+  it "assigns a new value if unknown value is received at deeper levels" do
+    subject = DocumentHash::Core[{ test: { inner: "value" } }]
+    subject.unknown.inner = 'test'
+    subject.unknown.inner.should == 'test'
+  end
+
+  it "can assign values thru methods" do
+    subject = DocumentHash::Core[{ test: "value" }]
+    subject.test = "new"
+    subject.test.should == "new"
+  end
+
+  it "can assign values thru methods at deeper levels" do
+    subject = DocumentHash::Core[{ test: { inner: "value" } }]
+    subject.test.inner = "new"
+    subject.test.inner.should == "new"
+  end
+
 end

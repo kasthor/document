@@ -1,5 +1,43 @@
 module DocumentHash
+
+  class Nil
+    attr_accessor :parent
+    def path
+      @path ||= []
+    end
+
+    def initialize parent = nil, hash_path = nil
+      @parent = parent
+      @path = hash_path 
+    end
+
+    def nil?
+      true
+    end
+
+    def == val
+      val == false 
+    end
+
+    def method_missing method, *args
+      if method =~ /^(.*)=/
+        parent.__send__ :create_path, (self.path << $1.to_sym), args.pop
+      else
+        return self.class.new( self.parent, self.path << method)
+      end
+    end
+  end
+
   class Core < Hash
+
+    def method_missing method, *args
+      if method =~ /^(.*)=$/
+        self.__send__(:[]=, method[0..-2], args.pop)
+      else
+        self.__send__(:[], method) || DocumentHash::Nil.new(self, [method])
+      end
+    end
+
     def self.[] hash, parent = nil, parent_key = nil
       super(hash).tap do|new|
         new.__send__ :parent=, parent if parent
@@ -99,6 +137,19 @@ module DocumentHash
 
     def changed_attributes 
       @changed ||= ::Set.new
+    end
+
+    def create_path path, value
+      curr = self
+      path.each_with_index do |key, index|
+        unless index == path.size - 1
+          curr[key] = self.class.new
+          curr = curr[key]
+        else
+          curr[key] = value
+        end
+      end
+      curr = value
     end
 
     def self.symbolize_keys hash
