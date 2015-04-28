@@ -103,13 +103,21 @@ module DocumentHash
       self
     end
 
-    def to_hash
+    def to_hash options = {}
       Hash[
         self.collect do |k,v|
-          if v.is_a? DocumentHash::Core
-            [ k, v.to_hash ]
+          if options[:stringify_keys]
+            key = k.to_s
+          elsif options[:symbolize_keys]
+            key = k.to_sym
           else
-            [ k, v ]
+            key = k
+          end
+
+          if v.is_a? DocumentHash::Core
+            [ key, v.to_hash ]
+          else
+            [ key, v ]
           end
         end
       ]

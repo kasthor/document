@@ -159,16 +159,30 @@ describe DocumentHash::Core do
     subject.touch!
   end
 
-  it "converts itself to a hash" do
+  it "returns a hash" do
     subject = DocumentHash::Core[{ test: "test" }]
     hash = subject.to_hash
     hash.should be_an_instance_of Hash
   end
 
-  it "converts internal hashes to hash" do
+  it "internal hashes are hashes" do
     subject = DocumentHash::Core[{ test: { inner: "value" } }]
     hash = subject.to_hash
     hash[:test].should be_an_instance_of Hash
+  end
+
+  it "return keys stringified as an option" do
+    subject = DocumentHash::Core[{ test: "test" }]
+    hash = subject.to_hash stringify_keys: true
+
+    hash.keys.all?{ |k| k === String }
+  end
+
+  it "return keys symbolized keys as an option" do
+    subject = DocumentHash::Core[{ test: "test" }]
+    hash = subject.to_hash symbolize_keys: true
+
+    hash.keys.all?{ |k| k === Symbol }
   end
 
   it "can access values thru methods" do
