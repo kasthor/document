@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/kasthor/document_hash/badge.svg)](https://coveralls.io/r/kasthor/document_hash)
+
 # Document
 
 Manages a Document, the document contains multiple nested objects, but changes on any sub-level is notified to the parent
