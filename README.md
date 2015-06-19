@@ -1,4 +1,5 @@
-[![Coverage Status](https://coveralls.io/repos/kasthor/document_hash/badge.svg)](https://coveralls.io/r/kasthor/document_hash)
+[![Code Climate](https://codeclimate.com/github/kasthor/document_hash/badges/gpa.svg)](https://codeclimate.com/github/kasthor/document_hash)
+[![Test Coverage](https://codeclimate.com/github/kasthor/document_hash/badges/coverage.svg)](https://codeclimate.com/github/kasthor/document_hash/coverage)
 
 # Document
 
