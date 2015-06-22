@@ -112,7 +112,7 @@ describe DocumentHash::Core do
     subject[:inner][:attribute] = "hello"
   end
 
-  it "triggers a callback before change",focus: true do
+  it "triggers a callback before change" do
     subject = DocumentHash::Core[ { inner: { attribute: "value" } } ]
     test_mock = double("test")
     test_mock.should_receive(:callback_mock).with([:inner, :attribute], "hello")
