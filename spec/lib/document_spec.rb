@@ -90,7 +90,7 @@ describe DocumentHash::Core do
 
   it "triggers the after change block" do
     subject = DocumentHash::Core.new
-    test_mock = mock("test")
+    test_mock = double("test")
     test_mock.should_receive(:callback_mock).with([:test], "value")
 
     subject.after_change do |path, value|
@@ -99,10 +99,10 @@ describe DocumentHash::Core do
 
     subject["test"] = "value"
   end
-  
+
   it "receives the right path when multilevel" do
     subject = DocumentHash::Core[ { inner: { attribute: "value" } } ]
-    test_mock = mock("test")
+    test_mock = double("test")
     test_mock.should_receive(:callback_mock).with([:inner, :attribute], "hello")
 
     subject.after_change do |path, value|
@@ -112,9 +112,9 @@ describe DocumentHash::Core do
     subject[:inner][:attribute] = "hello"
   end
 
-  it "triggers a callback before change" do
+  it "triggers a callback before change",focus: true do
     subject = DocumentHash::Core[ { inner: { attribute: "value" } } ]
-    test_mock = mock("test")
+    test_mock = double("test")
     test_mock.should_receive(:callback_mock).with([:inner, :attribute], "hello")
 
     subject.before_change do |path, value|
@@ -128,7 +128,7 @@ describe DocumentHash::Core do
     subject = DocumentHash::Core[ { inner: { attribute: "value" } } ]
 
     subject.before_change do |path, value|
-      "hola" 
+      "hola"
     end
 
     subject[:inner][:attribute] = "hello"
@@ -137,11 +137,11 @@ describe DocumentHash::Core do
 
   it "has a touch functionality that re runs the after change callback" do
     subject = DocumentHash::Core[ { test: :value } ]
-    test_mock = mock("test")
+    test_mock = double("test")
     test_mock.should_receive(:callback_mock).with( [:test], :value )
 
     subject.after_change do |path,value|
-      test_mock.callback_mock path, value  
+      test_mock.callback_mock path, value
     end
 
     subject.touch!
@@ -149,11 +149,11 @@ describe DocumentHash::Core do
 
   it "has a touch functionality that handle deeper hashes" do
     subject = DocumentHash::Core[ { inner: { attribute: :value } } ]
-    test_mock = mock("test")
+    test_mock = double("test")
     test_mock.should_receive(:callback_mock).with( [:inner, :attribute], :value )
 
     subject.after_change do |path,value|
-      test_mock.callback_mock path, value  
+      test_mock.callback_mock path, value
     end
 
     subject.touch!

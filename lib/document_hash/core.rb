@@ -8,7 +8,7 @@ module DocumentHash
 
     def initialize parent = nil, hash_path = nil
       @parent = parent
-      @path = hash_path 
+      @path = hash_path
     end
 
     def nil?
@@ -16,7 +16,7 @@ module DocumentHash
     end
 
     def == val
-      val == false 
+      val == false
     end
 
     def method_missing method, *args
@@ -44,7 +44,7 @@ module DocumentHash
         new.__send__ :parent_key=, parent_key if parent_key
         new.keys.each do |k|
           if new[k].is_a?(Hash) && ! new[k].is_a?(self.class)
-            new[k] = new.class[new.delete(k)] 
+            new[k] = new.class[new.delete(k)]
           else
             new[k] = new.delete(k)
           end
@@ -57,7 +57,7 @@ module DocumentHash
       changed_attributes.dup.freeze
     end
 
-    def changed? 
+    def changed?
       ! changed.empty?
     end
 
@@ -69,7 +69,7 @@ module DocumentHash
       key = key.to_sym
 
       if val.is_a? Hash
-        val = self.class[val, self, key] 
+        val = self.class[val, self, key]
       end
 
       val = execute_before_change_callback key,val
@@ -79,7 +79,7 @@ module DocumentHash
 
     def reset!
       changed_attributes.clear
-    
+
       values.select{|v| v.is_a? self.class }.each{ |v| v.reset! }
     end
 
@@ -123,7 +123,7 @@ module DocumentHash
       ]
     end
 
-    private 
+    private
 
     attr_accessor :parent, :parent_key
 
@@ -143,7 +143,7 @@ module DocumentHash
       value
     end
 
-    def changed_attributes 
+    def changed_attributes
       @changed ||= ::Set.new
     end
 
